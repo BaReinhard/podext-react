@@ -91,3 +91,20 @@ components\
 ```
 
 Each component is under the `components` folder.
+
+
+
+# Running in Rig
+0. Run `npm start` in your console
+1. Start the Twitch Developer Rig
+2. Select Create your first Project
+3. Select New Extension in the first drop down.
+4. Enter whatever project name you would like.
+5. Select Panel type
+6. Select Next
+7. Under `Select the local folder where your extensions files will be located during development.` Select the path of the this repo.
+8. Under `Add Code to you Project` Select `None - I'll use my own code`
+9. Select Next, then Select Get Started.
+10. To the test views, select extension views in the left pane
+11. Then Select `Create New View`
+12. Choose the view type you would like to see, give it a view label, and choose the viewer type, then click save.

@@ -13,7 +13,9 @@ export default class App extends React.Component{
         this.state={
             finishedLoading:false,
             theme:'light',
-            isVisible:true
+            isVisible:true,
+            value: '',
+            accountName:''
         }
     }
 
@@ -32,6 +34,35 @@ export default class App extends React.Component{
             }
         })
     }
+
+    handleChange(event){
+        this.setState({ value: event.target.value, error: false });
+    };
+
+    handleSubmit(){
+        this.setState({accountName: this.state.value})
+    // axios
+    //     .post("/api/addusername", { username: this.state.value })
+    //     .then(response => {
+    //     this.setState({
+    //         modal: true,
+    //         usernameResponse: response.data.status,
+    //         error: response.data.status.includes("taken"),
+    //         showQR: !response.data.status.includes("taken"),
+    //         generatedValue: this.state.value,
+    //         disableForm: true
+    //     });
+    //     })
+    //     .catch(err => {
+    //     console.log(err);
+    //     this.setState({
+    //         modal: true,
+    //         error: true,
+    //         usernameResponse:
+    //         "An Error has Occurred Saving your Username. Please try again."
+    //     });
+    //     });
+    };
 
     componentDidMount(){
         if(this.twitch){
@@ -88,10 +119,10 @@ export default class App extends React.Component{
                 <p className="loader-text">loading...</p>
             </div>
             <div className="pod-live-conf-body-content">
-                <div className="pod-live-conf-current-name">Live with:<span id="currentAccname" className="pod-live-conf-name-title"></span></div>
+                <div className="pod-live-conf-current-name">Live with:<span id="currentAccname" className="pod-live-conf-name-title">{this.state.accountName}</span></div>
                 <hr />
-                <input id="podAccname" className="pod-live-conf-input" type="text" placeholder="Enter your pod account name" val="" />
-                <button id="submitChar"onClick={()=>this.Twitch.ext.rig.log("Submitting Account Name")} className="pod-live-conf-button">Submit</button>
+                <input onChange={this.handleChange.bind(this)} value={this.state.value} id="podAccname" className="pod-live-conf-input" type="text" placeholder="Enter your pod account name" />
+                <button id="submitChar" onClick={this.handleSubmit.bind(this)} className="pod-live-conf-button">Submit</button>
             </div>
         </div>
     </div>)

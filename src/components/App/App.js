@@ -47,7 +47,7 @@ export default class App extends React.Component{
     handleSubmit(){
         let data = { accountName: this.state.value}
         this.twitch.configuration.set('broadcaster','0.1', JSON.stringify(data))
-        this.setState(()=>{return data})
+        this.twitch.send("broadcast","application/json",data)
          
     // axios
     //     .post(`${process.env.REACT_APP_API_URL}account/${this.state.value}` )
@@ -78,7 +78,6 @@ export default class App extends React.Component{
                     })
                 }
             })
-            let me = this;
             this.twitch.configuration.onChanged(()=>{
                 let config = this.twitch.configuration.broadcaster ? this.twitch.configuration.broadcaster.content : {accountName:"fallback"}
                 
@@ -94,7 +93,8 @@ export default class App extends React.Component{
             this.twitch.listen('broadcast',(target,contentType,body)=>{
                 this.twitch.rig.log(`New PubSub message!\n${target}\n${contentType}\n${body}`)
                 // now that you've got a listener, do something with the result... 
-
+                body = JSON.parse(body)
+                this.setState(()=>({accountName: body.accountName}))
                 // do something...
 
             })

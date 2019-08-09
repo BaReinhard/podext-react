@@ -108,3 +108,7 @@ Each component is under the `components` folder.
 10. To the test views, select extension views in the left pane
 11. Then Select `Create New View`
 12. Choose the view type you would like to see, give it a view label, and choose the viewer type, then click save.
+
+
+# DOCUMENTATION on the JS Helper for Twitch:
+- https://dev.twitch.tv/docs/extensions/reference/#helper-actions

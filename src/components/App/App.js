@@ -1,6 +1,7 @@
 import React from 'react'
 import Authentication from '../../util/Authentication/Authentication'
 import axios from 'axios'
+import { characterResponse, accountName } from '../mocks/paininthenec.js';
 
 import './App.css'
 
@@ -16,7 +17,7 @@ export default class App extends React.Component{
             theme:'light',
             isVisible:true,
             value: '',
-            accountName:''
+            accountName:accountName
         }
     }
 
@@ -41,20 +42,21 @@ export default class App extends React.Component{
     };
 
     handleSubmit(){
-    axios
-        .post(`${process.env.REACT_APP_API_URL}account/${this.state.value}` )
-        .then(response => {
-        this.setState({
-            accountName:response.data
-        });
-        })
-        .catch(err => {
-        console.log(err);
-        this.setState({
-            accountName:
-            "An Error has Occurred Saving your Username. Please try again." + err
-        });
-        });
+         this.setState({accountName: characterResponse.Name});
+    // axios
+    //     .post(`${process.env.REACT_APP_API_URL}account/${this.state.value}` )
+    //     .then(response => {
+    //     this.setState({
+    //         accountName:response.data
+    //     });
+    //     })
+    //     .catch(err => {
+    //     console.log(err);
+    //     this.setState({
+    //         accountName:
+    //         "An Error has Occurred Saving your Username. Please try again." + err
+    //     });
+    //     });
     };
 
     componentDidMount(){

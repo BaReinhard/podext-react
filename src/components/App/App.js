@@ -17,7 +17,10 @@ export default class App extends React.Component{
             theme:'light',
             isVisible:true,
             value: '',
-            accountName:accountName
+            accountName:'',
+            moderator:true,
+            characterData:null,
+            errorMessage:'',
         }
     }
 
@@ -42,7 +45,9 @@ export default class App extends React.Component{
     };
 
     handleSubmit(){
-         this.setState({accountName: characterResponse.Name});
+        let data = {accountName:accountName}
+        this.twitch.configuration.set('broadcaster','0.1', (data))
+         
     // axios
     //     .post(`${process.env.REACT_APP_API_URL}account/${this.state.value}` )
     //     .then(response => {
@@ -58,9 +63,9 @@ export default class App extends React.Component{
     //     });
     //     });
     };
-
     componentDidMount(){
         if(this.twitch){
+            
             this.twitch.onAuthorized((auth)=>{
                 this.Authentication.setToken(auth.token, auth.userId)
                 if(!this.state.finishedLoading){
@@ -68,11 +73,23 @@ export default class App extends React.Component{
 
                     // now we've done the setup for the component, let's set the state to true to force a rerender with the correct data.
                     this.setState(()=>{
-                        return {finishedLoading:true}
+                        return {finishedLoading:true, moderator: this.Authentication.isModerator()}
                     })
                 }
             })
 
+            this.twitch.configuration.onChanged(()=>{
+                let config = this.twitch.configuration.broadcaster ? this.twitch.configuration.broadcaster.content : {accountName:"fallback"}
+                
+                    // config = JSON.parse(config)
+         
+                    
+                this.twitch.rig.log(`New Config message!\n${JSON.stringify(config)}`)
+
+                this.setState(()=>({
+                    accountName:JSON.stringify(config),
+                }))
+            })
             this.twitch.listen('broadcast',(target,contentType,body)=>{
                 this.twitch.rig.log(`New PubSub message!\n${target}\n${contentType}\n${body}`)
                 // now that you've got a listener, do something with the result... 
@@ -88,17 +105,20 @@ export default class App extends React.Component{
             this.twitch.onContext((context,delta)=>{
                 this.contextUpdate(context,delta)
             })
+            if(!this.state.characterData && this.state.accountName){
+                this.setState(()=>({characterData:characterResponse, accountName:characterResponse.Name}))
+            }
         }
     }
 
     componentWillUnmount(){
         if(this.twitch){
-            this.twitch.unlisten('broadcast', ()=>console.log('successfully unlistened'))
+            this.twitch.unlisten('broadcast', ()=>this.twitch.rig.log('successfully unlistened'))
         }
     }
     
     render(){
-        if(this.state.finishedLoading && this.state.isVisible){
+        if(this.state.finishedLoading && this.state.isVisible ){
             return (
                 <div className="pod-live-conf">
         <div className="pod-live-conf-header">
@@ -116,8 +136,11 @@ export default class App extends React.Component{
             <div className="pod-live-conf-body-content">
                 <div className="pod-live-conf-current-name">Live with:<span id="currentAccname" className="pod-live-conf-name-title">{this.state.accountName}</span></div>
                 <hr />
-                <input onChange={this.handleChange.bind(this)} value={this.state.value} id="podAccname" className="pod-live-conf-input" type="text" placeholder="Enter your pod account name" />
-                <button id="submitChar" onClick={this.handleSubmit.bind(this)} className="pod-live-conf-button">Submit</button>
+                {this.state.moderator?<input onChange={this.handleChange.bind(this)} value={this.state.value} id="podAccname" className="pod-live-conf-input" type="text" placeholder="Enter your pod account name" />:""}
+                {this.state.moderator? <button id="submitChar" onClick={this.handleSubmit.bind(this)} className="pod-live-conf-button">Submit</button> : ''}
+                <div>
+                   this
+                </div>
             </div>
         </div>
     </div>)
@@ -125,8 +148,7 @@ export default class App extends React.Component{
             
         }else{
             return (
-                <div className="App">
-                </div>
+                <div>This</div>
             )
         }
 

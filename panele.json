@@ -50,8 +50,8 @@
       }
     },
     {
-      "id": "4",
-      "label": "asdasd",
+      "id": "5",
+      "label": "",
       "channelId": "83792476",
       "configurationAnchor": "panel",
       "displayChannelName": "barreinhard",
@@ -63,7 +63,7 @@
       "linkedUserId": "",
       "mode": "viewer",
       "isPopout": false,
-      "role": "Broadcaster",
+      "role": "Logged-In Viewer",
       "x": 0,
       "y": 0,
       "orientation": "Portrait",

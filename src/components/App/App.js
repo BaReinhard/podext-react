@@ -1,5 +1,6 @@
 import React from 'react'
 import Authentication from '../../util/Authentication/Authentication'
+import axios from 'axios'
 
 import './App.css'
 
@@ -40,28 +41,20 @@ export default class App extends React.Component{
     };
 
     handleSubmit(){
-        this.setState({accountName: this.state.value})
-    // axios
-    //     .post("/api/addusername", { username: this.state.value })
-    //     .then(response => {
-    //     this.setState({
-    //         modal: true,
-    //         usernameResponse: response.data.status,
-    //         error: response.data.status.includes("taken"),
-    //         showQR: !response.data.status.includes("taken"),
-    //         generatedValue: this.state.value,
-    //         disableForm: true
-    //     });
-    //     })
-    //     .catch(err => {
-    //     console.log(err);
-    //     this.setState({
-    //         modal: true,
-    //         error: true,
-    //         usernameResponse:
-    //         "An Error has Occurred Saving your Username. Please try again."
-    //     });
-    //     });
+    axios
+        .post(`${process.env.REACT_APP_API_URL}account/${this.state.value}` )
+        .then(response => {
+        this.setState({
+            accountName:response.data
+        });
+        })
+        .catch(err => {
+        console.log(err);
+        this.setState({
+            accountName:
+            "An Error has Occurred Saving your Username. Please try again." + err
+        });
+        });
     };
 
     componentDidMount(){

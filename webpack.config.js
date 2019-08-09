@@ -43,11 +43,15 @@ module.exports = (_env,argv)=> {
   }
 
   let entry = {}
-
+  const envKeys = Object.keys(_env).reduce((prev, next) => {
+    prev[`process.env.${next}`] = JSON.stringify(_env[next]);
+    return prev;
+  }, {})
   // edit webpack plugins here!
   let plugins = [
     new CleanWebpackPlugin(['dist']),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin(envKeys)
   ]
 
   for(name in entryPoints){

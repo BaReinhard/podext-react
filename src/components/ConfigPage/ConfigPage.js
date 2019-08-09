@@ -38,18 +38,32 @@ export default class ConfigPage extends React.Component{
                     })
                 }
             })
+            this.twitch.configuration.onChanged(()=>{
+                // delete this.twitch.configuration.onChanged;
+                // this.twitch.rig.log(JSON.stringify(this.twitch.configuration))
+            })
     
             this.twitch.onContext((context,delta)=>{
                 this.contextUpdate(context,delta)
             })
         }
     }
+    handleClick(){
+        this.twitch.configuration.set('broadcaster','1.0',{accountName:"test"})
+        this.twitch.rig.log(`New Config message!\n${this.twitch.configuration.broadcaster}`)
+        delete this.twitch.configuration.onChanged;
+        let me = this;
+        setTimeout(()=>{
+            me.twitch.rig.log(JSON.stringify(me.twitch))
 
+        },3000)
+
+    }
     render(){
         if(this.state.finishedLoading && this.Authentication.isModerator()){
             return(
                 <div className="config">
-        <div class="config-text">
+        <div className="config-text">
             <br/>Setup Instructions
 			<br/>
 			<br/>1. Go to <b>Extensions</b> page then <b>My Extensions</b> . Under PoD Gear click <i>Activate</i> and then <i>Set as Component X</i>
@@ -59,6 +73,7 @@ export default class ConfigPage extends React.Component{
 			<br/>3. Type in your Account name and click submit. You may need to refresh your browser to see the extension on stream.
 			<br/>
 			<br/><i>Your latest character used will be shown automatically. Report feedback/bugs on the #website_portal channel of our discord.</i>
+            <button id="submitChar" onClick={this.handleClick.bind(this)} className="pod-live-conf-button">Submit</button>
         </div>
     </div>
             )
